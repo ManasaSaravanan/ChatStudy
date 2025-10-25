@@ -1,6 +1,6 @@
 # Ex. No:1b 			Study of Client Server Chat Applications
-## 212224220059
 ## MANASA S
+## 212224220059
 ## Aim: 
 To perform a study on Client Server Chat Applications
 ## Introduction:
@@ -73,53 +73,42 @@ User authentication mechanisms are essential to ensure secure and authorized acc
 Client-server chat applications are versatile tools that facilitate real-time communication between users over a network. They incorporate various components, including server-side and client-side elements, and must consider factors such as security, scalability, and concurrency. As technology continues to advance, client-server chat applications remain integral for collaborative communication in various domains.
 
 Client-server chat applications are foundational to real-time communication over networks. They incorporate principles of socket programming, communication protocols, and security mechanisms to provide a seamless user experience. Understanding the basics of client-server chat applications is essential for developers involved in networked application development, as they form the backbone of various collaborative communication systems. As technology evolves, chat applications continue to adapt, incorporating new features and technologies to enhance user interaction and connectivity.
-## PROGRAM (CLIENT)
+
+## Program
 ```
+Server.py
+
 import socket
-s = socket.socket()
-host = input(str('Enter hostname or host IP : '))
-port= 8080
-s.connect((host, port))
-print('Connected to chat server')
-while 1:
-    incoming_message = s.recv(1024)
-    incoming_message =incoming_message.decode() 
-    print(' Server : ',incoming_message) 
-    print()
-    message = input(str('>> '))
-    message =message.encode()
-    s.send(message)
-    print('Sent')
-    print()
+from datetime import datetime
+s=socket.socket()
+s.bind(('localhost',8002))
+s.listen(5)
+c,addr=s.accept()
+print("Client Address : ",addr)
+now = datetime.now()
+c.send(now.strftime("Date: %d/%m/%Y and Time: %H:%M:%S").encode())
+ack=c.recv(1024).decode()
+if ack:
+    print(ack)
+c.close()
 ```
-## PROGRAM (SERVER)
 ```
+Client.py
+
 import socket
-s = socket.socket()
-host = socket.gethostname()
-print(' Server will start on host : ',host)
-port = 8080
-s.bind((host, port))
-print()
-print('Waiting forcconnection')
-print()
-s.listen(1)
-conn, addr = s.accept()
-print(addr, ' Has connected to theserver')
-print()
-while 1:
-    message =input(str('>> '))
-    message =message.encode()
-    conn.send(message)
-    print('Sent')
-    print()
-    incoming_message = conn.recv(1024)
-    incoming_message =incoming_message.decode()
-    print(' Client : ',incoming_message)
-    print()
+s=socket.socket()
+s.connect(('localhost',8002))
+print(s.getsockname())
+print(s.recv(1024).decode())
+s.send("acknowledgement recived from the server".encode())
+
 ```
-## OUTPUT
-<img width="1919" height="1136" alt="Screenshot 2025-09-03 102549" src="https://github.com/user-attachments/assets/cd904624-1884-4d92-8939-7099593ed737" />
+
+## Output:
+
+<img width="1919" height="1151" alt="image" src="https://github.com/user-attachments/assets/658afc6e-7e1d-4333-b33f-8e077de64998" />
+
+
 
 ## Result:
 
